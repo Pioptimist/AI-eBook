@@ -27,8 +27,4 @@ export const BASE_URL =
   window.location.hostname === "localhost"
     ? "http://localhost:8000"
     : "https://ai-ebook.onrender.com";
-<<<<<<< HEAD
-;
-=======
-;
->>>>>>> ccbdf31 (Fix: corrected import path for axiosInstance)
+
