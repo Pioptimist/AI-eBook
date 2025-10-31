@@ -93,33 +93,78 @@ exports.getProfile = async (req, res) => {
 // @desc   Update user profile
 // @route  PUT /api/auth/profile
 // @access Private
+// exports.updateUserProfile = async (req, res) => {
+//   const bodyKeys = Object.keys(req.body || {});
+//   const fileKeys = Object.keys(req.files || {});
+
+//   // Check if the request body is empty AND no files were uploaded
+//   if (bodyKeys.length === 0 && fileKeys.length === 0) {
+//     // Return 400 Bad Request if the request is empty
+//     return res.status(400).json({ message: 'No update data or file provided.' });
+//   }
+//   const avatarFileArray = req.files && req.files['avatar'];
+//   const user = await User.findById(req.user._id);
+//   const body = req.body || {};
+//   // console.log('Request Body:', req.body);
+//   //   console.log('Uploaded Files:', req.files);
+
+//   if (user) {
+//     // user.name = req.body.name || user.name;
+//   //a very big problem here is if user doesnt send anything then req.body is undefined and undefined,name or password or anything will throw an error so as to safeguard we do
+//     user.name = body.name || user.name;
+//     user.email = body.email || user.email;
+//     if (body.password) {
+//       user.password = body.password;
+//     }
+//     if (avatarFileArray && avatarFileArray.length > 0) {
+//             const avatarFile = avatarFileArray[0];
+//             user.avatar = `/uploads/${avatarFile.filename.replace(/\\/g, '/')}`; 
+//     }
+//     const updatedUser = await user.save();
+
+//     res.json({
+//       _id: updatedUser._id,
+//       name: updatedUser.name,
+//       email: updatedUser.email,
+//       avatar: updatedUser.avatar,
+//       token: generateToken(updatedUser._id),
+//     });
+//   } else {
+//     res.status(404).json({ message: 'User not found' });
+//   }
+// };
+
+
+// the above commented was the logic when the files were stored on the laptop now the below is when the logic is updated in cloudinary
+
 exports.updateUserProfile = async (req, res) => {
-  const bodyKeys = Object.keys(req.body || {});
-  const fileKeys = Object.keys(req.files || {});
+  try {
+    const bodyKeys = Object.keys(req.body || {});
+    const fileKeys = Object.keys(req.files || {});
 
-  // Check if the request body is empty AND no files were uploaded
-  if (bodyKeys.length === 0 && fileKeys.length === 0) {
-    // Return 400 Bad Request if the request is empty
-    return res.status(400).json({ message: 'No update data or file provided.' });
-  }
-  const avatarFileArray = req.files && req.files['avatar'];
-  const user = await User.findById(req.user._id);
-  const body = req.body || {};
-  console.log('Request Body:', req.body);
-    console.log('Uploaded Files:', req.files);
+    if (bodyKeys.length === 0 && fileKeys.length === 0) {
+      return res.status(400).json({ message: 'No update data or file provided.' });
+    }
 
-  if (user) {
-    // user.name = req.body.name || user.name;
-  //a very big problem here is if user doesnt send anything then req.body is undefined and undefined,name or password or anything will throw an error so as to safeguard we do
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Update name, email, password (same as before)
+    const body = req.body || {};
     user.name = body.name || user.name;
     user.email = body.email || user.email;
     if (body.password) {
       user.password = body.password;
     }
-    if (avatarFileArray && avatarFileArray.length > 0) {
-            const avatarFile = avatarFileArray[0];
-            user.avatar = `/uploads/${avatarFile.filename.replace(/\\/g, '/')}`; 
+
+    //  Now handle avatar (Cloudinary URL from middleware)
+    // Your handleUpload middleware attached this as req.uploadedFiles.avatar
+    if (req.uploadedFiles && req.uploadedFiles.avatar) {
+      user.avatar = req.uploadedFiles.avatar;
     }
+
     const updatedUser = await user.save();
 
     res.json({
@@ -129,7 +174,8 @@ exports.updateUserProfile = async (req, res) => {
       avatar: updatedUser.avatar,
       token: generateToken(updatedUser._id),
     });
-  } else {
-    res.status(404).json({ message: 'User not found' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
