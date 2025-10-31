@@ -787,25 +787,50 @@ const exportAsPDF = async (req, res) => {
         doc.pipe(res);
 
         // Cover page with image if available
+        // if (book.coverImage && !book.coverImage.includes("pravatar")) {
+        //     const imagePath = book.coverImage.substring(1);
+
+        //     try {
+        //         if (fs.existsSync(imagePath)) {
+        //             const pageWidth = doc.page.width - doc.page.margins.left - doc.page.margins.right;
+        //             const pageHeight = doc.page.height - doc.page.margins.top - doc.page.margins.bottom;
+
+        //             doc.image(imagePath, doc.page.margins.left, doc.page.margins.top, {
+        //                 fit: [pageWidth * 0.8, pageHeight * 0.8],
+        //                 align: "center",
+        //                 valign: "center",
+        //             });
+        //             doc.addPage();
+        //         }
+        //     } catch (imgErr) {
+        //         console.error(`Could not embed image: ${imagePath}`, imgErr);
+        //     }
+        // }
+
+        // Cover page with image if available (Cloudinary-based)
         if (book.coverImage && !book.coverImage.includes("pravatar")) {
-            const imagePath = book.coverImage.substring(1);
-
             try {
-                if (fs.existsSync(imagePath)) {
-                    const pageWidth = doc.page.width - doc.page.margins.left - doc.page.margins.right;
-                    const pageHeight = doc.page.height - doc.page.margins.top - doc.page.margins.bottom;
+                // Fetch image from Cloudinary URL
+                const response = await fetch(book.coverImage);
+                const imageBuffer = Buffer.from(await response.arrayBuffer());
 
-                    doc.image(imagePath, doc.page.margins.left, doc.page.margins.top, {
-                        fit: [pageWidth * 0.8, pageHeight * 0.8],
-                        align: "center",
-                        valign: "center",
-                    });
-                    doc.addPage();
-                }
+                // Get available page space
+                const pageWidth = doc.page.width - doc.page.margins.left - doc.page.margins.right;
+                const pageHeight = doc.page.height - doc.page.margins.top - doc.page.margins.bottom;
+
+                // Add the image to the page
+                doc.image(imageBuffer, doc.page.margins.left, doc.page.margins.top, {
+                    fit: [pageWidth * 0.8, pageHeight * 0.8],
+                    align: "center",
+                    valign: "center",
+                });
+
+                doc.addPage();
             } catch (imgErr) {
-                console.error(`Could not embed image: ${imagePath}`, imgErr);
+                console.error(`Could not embed Cloudinary image: ${book.coverImage}`, imgErr);
             }
         }
+
 
         // Title page
         doc
