@@ -129,7 +129,7 @@ Begin writing the chapter content now:`;
     });
 
     res.status(200).json({ content: response.text });
-    // dont confusse this with props dumbfuck, that only exists i frontnd not backend
+    // dont confusse this with props dumbfuck, that only exists in frontend not backend
 
 
     
