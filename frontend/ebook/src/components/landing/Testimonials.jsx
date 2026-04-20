@@ -23,7 +23,7 @@ const Testimonials = () => {
             </span>
           </h2>
           <p className='text-lg text-gray-600 max-w-2xl mx-auto'>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.
+            Our site has received positive feedback from users and creators alike, with many praising the platform for its ease of use and the quality of the generated content.
           </p>
         </div>
         {/* Testimonials Grid */}

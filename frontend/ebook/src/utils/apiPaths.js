@@ -23,4 +23,8 @@ export const API_PATHS = {
   },
 };
 
-export const BASE_URL = "http://localhost:8000";
+export const BASE_URL =
+  window.location.hostname === "localhost"
+    ? "http://localhost:8000"
+    : "https://ai-ebook.onrender.com";
+
