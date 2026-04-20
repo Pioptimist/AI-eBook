@@ -10,6 +10,10 @@ const aiRoutes = require('./routes/aiRoutes.js');
 const exportRoutes = require('./routes/exportRoutes.js');
 const app = express();
 
+
+app.get("/", (req, res)=>{
+    res.status(200).json({msg: "api is up and running"})
+});
 // Middleware
 app.use(cors({
     origin: "*",
