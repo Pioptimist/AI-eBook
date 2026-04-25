@@ -14,7 +14,7 @@ const Hero = () => {
           <div className="inline-flex items-center space-x-2 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full border border-violet-100 shadow-sm">
             <Sparkles className="w-4 h-4 text-violet-600" />
             <span className="text-violet-900 font-medium text-sm">
-              AI-Powered Publishing
+              AI - Powered Publishing
             </span>
           </div>
           <h1 className="text-5xl sm:text-6xl lg:text-6xl font-bold text-gray-900 leading-tight tracking-tight">
