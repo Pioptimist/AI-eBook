@@ -7,7 +7,7 @@ const BookCard = ({ book, onDelete }) => {
 
   const coverImageUrl = book.coverImage.startsWith('http')
     ? book.coverImage
-    : `${BASE_URL}/backend${book.coverImage}`.replace(/\\/g, '/');
+    : `${BASE_URL}/${book.coverImage}`.replace(/\\/g, '/');
 
     return (
         <div

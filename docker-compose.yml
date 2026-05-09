@@ -1,0 +1,18 @@
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/.env
+    # This ensures backend restarts if it crashes
+    restart: always
+
+  frontend:
+    build: ./frontend/ebook
+    ports:
+      - "80:80"
+    restart: always
+    # Frontend depends on backend being up
+    depends_on:
+      - backend

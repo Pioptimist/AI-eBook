@@ -23,8 +23,16 @@ export const API_PATHS = {
   },
 };
 
-export const BASE_URL =
-  window.location.hostname === "localhost"
-    ? "http://localhost:8000"
-    : "https://ai-ebook.onrender.com";
+export let BASE_URL = "";
 
+
+if (import.meta.env.VITE_API_URL) {
+  BASE_URL = import.meta.env.VITE_API_URL;
+} 
+
+else if (import.meta.env.DEV) {
+  BASE_URL = "http://localhost:8000";
+}
+else{
+  BASE_URL = ""; 
+}

@@ -11,7 +11,7 @@ const Navbar = () => {
 
   const avatarUrl = user?.avatar && user.avatar.startsWith('http')
           ? user.avatar
-          : user?.avatar && `${BASE_URL}/backend${user.avatar}`.replace(/\\/g, '/');
+          : user?.avatar && `${BASE_URL}/${user.avatar}`.replace(/\\/g, '/');
 
   const navLinks = [
     { name: "Features", href: "#features" },

@@ -12,7 +12,7 @@ const DashboardLayout = ({ children , noMainStyle = false}) => {
 
   const avatarUrl = user?.avatar?.startsWith('http')
         ? user.avatar
-        : user?.avatar &&`${BASE_URL}/backend${user.avatar}`.replace(/\\/g, '/');
+        : user?.avatar &&`${BASE_URL}/${user.avatar}`.replace(/\\/g, '/');
 
   // Close dropdowns when clicking outside
   useEffect(() => {

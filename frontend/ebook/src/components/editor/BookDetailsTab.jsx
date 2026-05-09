@@ -12,7 +12,7 @@ const BookDetailsTab = ({
 }) => {
   const coverImageUrl = book.coverImage.startsWith('http')
     ? book.coverImage
-    : `${BASE_URL}/backend${book.coverImage}`.replace(/\\/g, '/');  //this checks if the image is already a url or not,if it is then we can just use that link and if it is stored loally like in this case in this device then we use the base url to access the image
+    : `${BASE_URL}/${book.coverImage}`.replace(/\\/g, '/');  //this checks if the image is already a url or not,if it is then we can just use that link and if it is stored loally like in this case in this device then we use the base url to access the image
 
   return <div className="p-8 max-w-4xl mx-auto">
     <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">

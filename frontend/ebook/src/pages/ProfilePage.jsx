@@ -94,7 +94,7 @@ const textVariants ={
 
   const coverImageUrl = user.avatar.startsWith('http')
       ? user.avatar
-      : `${BASE_URL}/backend${user.avatar}`.replace(/\\/g, '/');
+      : `${BASE_URL}/${user.avatar}`.replace(/\\/g, '/');
 
   const handleAvatarUpload = async (e) => {
     const file = e.target.files[0];
