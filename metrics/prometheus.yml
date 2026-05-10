@@ -1,0 +1,9 @@
+global:
+  scrape_interval: 10s # How often to ping your server for new data
+
+scrape_configs:
+  - job_name: 'nodejs_backend'
+    static_configs:
+      # In Docker, containers can talk to each other using their service names!
+      # We tell it to look at the 'backend' container on port 5000.
+      - targets: ['backend:8000']

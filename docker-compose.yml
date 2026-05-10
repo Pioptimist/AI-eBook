@@ -11,8 +11,35 @@ services:
   frontend:
     build: ./frontend/ebook
     ports:
-      - "80:80"
+      - "80:80" # in the vm make sure it is 3000:80 to avoid conflict with host nginx
     restart: always
     # Frontend depends on backend being up
     depends_on:
       - backend
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./metrics/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    restart: always
+    depends_on:
+      - backend
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "4000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+    restart: always
+    depends_on:
+      - prometheus
+  
+volumes:
+  prometheus_data:
+  grafana_data:
