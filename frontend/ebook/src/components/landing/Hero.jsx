@@ -39,7 +39,7 @@ const Hero = () => {
            </div>
            <div className="flex items-center gap-8 pt-4">
             <div>
-                <div className="text-2xl font-bold text-gray-900">50k+</div>
+                <div className="text-2xl font-bold text-gray-900">500+</div>
                 <div className="text-sm text-gray-600">Books Created</div>
             </div>
             <div className="w-px h-12 bg-gray-200"></div>
