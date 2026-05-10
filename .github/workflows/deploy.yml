@@ -1,0 +1,61 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # 1. Get repository code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Login to Docker Hub
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # 3. Build Backend Image
+      - name: Build backend image
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/ai-ebook-backend:latest ./backend
+
+      # 4. Build Frontend Image
+      - name: Build frontend image
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/ai-ebook-frontend:latest ./frontend/ebook
+
+      # 5. Push Backend Image
+      - name: Push backend image
+        run: |
+          docker push ${{ secrets.DOCKER_USERNAME }}/ai-ebook-backend:latest
+
+      # 6. Push Frontend Image
+      - name: Push frontend image
+        run: |
+          docker push ${{ secrets.DOCKER_USERNAME }}/ai-ebook-frontend:latest
+
+      # 7. SSH into EC2 and deploy
+      - name: Deploy on EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd ~/ai-ebook-prod
+
+            docker compose pull
+
+            docker compose down
+
+            docker compose up -d
+
+            docker image prune -af
